@@ -33,6 +33,20 @@ public class Row
         Cells.AddRange(ExtractCells(text));
     }
 
+    /// <summary>
+    /// Returns the row as a CSV string, with cells
+    /// quoted as per the original file.
+    /// The output will be well-formed and regular
+    /// so it may not exactly match the original in
+    /// terms of whitespace.
+    /// </summary>
+    /// <returns></returns>
+    public string AsCSV()
+    {
+        var content = Cells.Select(c => c.Formatted);
+        return string.Join(",", content);
+    }
+
     override public string ToString()
     {
         return $"Row {RowNumber}: {CellCount} cell(s)";

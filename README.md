@@ -10,13 +10,13 @@ A simple-to-use reliable CSV-parsing library.
   - A collection of cells with each having:
     - A flag for if there were double-quotes in the input
     - The content, raw and pre-formatted with any quotes
+    - Can provide row content pre-formatted for writing back out
 - Flexible and accurate
   - Understands double-quoted and plain cells
   - Allows embedded commas where quoted
   - Accepts unquoted full text (stops at a comma)
   - Includes comprehensive tests
 - *TODO:*
-  - Can provide row content pre-formatted for writing out
   - Supports both CSV *and* tab-delimited rows
   - Returns errors with input row and character position
 

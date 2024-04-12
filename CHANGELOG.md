@@ -9,3 +9,4 @@
   - Row splitting
   - CSV item parsing
   - Test coverage
+  - CSV row output

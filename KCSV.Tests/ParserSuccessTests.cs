@@ -29,7 +29,7 @@ public class ParserSuccessTests
     }
 
     [Test]
-    public void Parser_RowsAreNumberedFromOne()
+    public void Parser_RowsAreNumbered_FromOne()
     {
         var parser = NewParser("ok-well-formed");
 
@@ -40,7 +40,7 @@ public class ParserSuccessTests
     }
 
     [Test]
-    public void Parser_RowsAreSplitIntoCells()
+    public void Parser_RowsAreSplit_IntoCells()
     {
         var parser = NewParser("ok-well-formed");
 
@@ -51,7 +51,7 @@ public class ParserSuccessTests
     }
 
     [Test]
-    public void Parser_WellFormedCellsAreCorrect()
+    public void Parser_WellFormedCells_AreCorrect()
     {
         var parser = NewParser("ok-well-formed");
         var cell = -1;
@@ -64,7 +64,7 @@ public class ParserSuccessTests
     }
 
     [Test]
-    public void Parser_EmbeddedCommasAreAllowed()
+    public void Parser_EmbeddedCommas_AreAllowed()
     {
         var parser = NewParser("ok-embedded-commas");
         var cell = -1;
@@ -77,7 +77,7 @@ public class ParserSuccessTests
     }
 
     [Test]
-    public void Parser_EmbeddedQuotesAreAllowed()
+    public void Parser_EmbeddedQuotes_AreAllowed()
     {
         var parser = NewParser("ok-embedded-quotes");
         var cell = -1;
@@ -90,7 +90,7 @@ public class ParserSuccessTests
     }
 
     [Test]
-    public void Parser_UnquotedCellsAreHandled()
+    public void Parser_UnquotedCells_AreHandled()
     {
         var parser = NewParser("ok-unquoted");
         var cell = -1;
@@ -103,7 +103,7 @@ public class ParserSuccessTests
     }
 
     [Test]
-    public void Parser_EmptyCellsAreAllowed()
+    public void Parser_EmptyCells_AreAllowed()
     {
         var parser = NewParser("ok-empty-cells");
         var cell = -1;
@@ -113,7 +113,7 @@ public class ParserSuccessTests
     }
 
     [Test]
-    public void Parser_WhitespaceIsHandled()
+    public void Parser_Whitespace_IsHandled()
     {
         var parser = NewParser("ok-whitespace");
         var cell = -1;
@@ -123,7 +123,7 @@ public class ParserSuccessTests
     }
 
     [Test]
-    public void Parser_EmptyFileIsHandled()
+    public void Parser_EmptyFile_IsHandled()
     {
         var parser = NewParser("ok-empty");
 
@@ -131,7 +131,7 @@ public class ParserSuccessTests
     }
 
     [Test]
-    public void Parser_EmptyRowsAreHandled()
+    public void Parser_EmptyRows_AreHandled()
     {
         var parser = NewParser("ok-empty-rows");
 
@@ -145,7 +145,7 @@ public class ParserSuccessTests
     }
 
     [Test]
-    public void Parser_JaggedRowsAreHandled()
+    public void Parser_JaggedRows_AreHandled()
     {
         var parser = NewParser("ok-jagged-rows");
 
