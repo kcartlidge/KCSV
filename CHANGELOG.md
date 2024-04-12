@@ -5,6 +5,7 @@
   - Standard repo files
   - NUnit test project
   - File loading
+  - Accept CSV strings
   - Row splitting
   - CSV item parsing
   - Test coverage

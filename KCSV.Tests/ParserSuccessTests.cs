@@ -12,6 +12,15 @@ public class ParserSuccessTests
     }
 
     [Test]
+    public void Parser_HandlesRowsOfText()
+    {
+        var csv = new string[] { "1,2", "1,2", "1,2", "1,2" };
+        var parser = new Parser(csv);
+
+        Assert.That(parser.RowCount, Is.EqualTo(4));
+    }
+
+    [Test]
     public void Parser_LoadsFile()
     {
         var parser = NewParser("ok-well-formed");

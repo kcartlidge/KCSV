@@ -4,6 +4,7 @@ A simple-to-use reliable CSV-parsing library.
 
 - Loads CSV from a file
   - Is fine with both Linux/Mac/Unix and Windows line endings
+  - Can also be fed arrays of CSV rows as strings
 - Splits into a collection of rows with:
   - Original CSV row number
   - A collection of cells with each having:
@@ -15,7 +16,6 @@ A simple-to-use reliable CSV-parsing library.
   - Accepts unquoted full text (stops at a comma)
   - Includes comprehensive tests
 - *TODO:*
-  - Can be fed arrays of CSV rows as strings
   - Can provide row content pre-formatted for writing out
   - Supports both CSV *and* tab-delimited rows
   - Returns errors with input row and character position

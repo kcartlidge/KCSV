@@ -25,4 +25,15 @@ public class Parser
         }
         rdr.Close();
     }
+
+    /// <summary>Create a new CSV parser for a set of rows.</summary>
+    /// <param name="rows">String content to parse.</param>
+    public Parser(string[] rows)
+    {
+        foreach (var row in rows)
+        {
+            // Parse each line as it is read in.
+            Rows.Add(new Row(RowCount + 1, row));
+        }
+    }
 }
