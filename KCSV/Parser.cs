@@ -15,25 +15,27 @@ public class Parser
 
     /// <summary>Create a new CSV parser for a file.</summary>
     /// <param name="filename">The file to read in.</param>
-    public Parser(string filename)
+    /// <param name="delimiter">Separator for cells in rows.</param>
+    public Parser(string filename, Delimiters delimiter = Delimiters.Comma)
     {
         using var rdr = new StreamReader(filename);
         while (rdr.EndOfStream == false)
         {
             // Parse each line as it is read in.
-            Rows.Add(new Row(RowCount + 1, rdr.ReadLine()));
+            Rows.Add(new Row(RowCount + 1, delimiter, rdr.ReadLine()));
         }
         rdr.Close();
     }
 
     /// <summary>Create a new CSV parser for a set of rows.</summary>
     /// <param name="rows">String content to parse.</param>
-    public Parser(string[] rows)
+    /// <param name="delimiter">Separator for cells in rows.</param>
+    public Parser(string[] rows, Delimiters delimiter = Delimiters.Comma)
     {
         foreach (var row in rows)
         {
             // Parse each line as it is read in.
-            Rows.Add(new Row(RowCount + 1, row));
+            Rows.Add(new Row(RowCount + 1, delimiter, row));
         }
     }
 }

@@ -21,9 +21,30 @@ public class ParserSuccessTests
     }
 
     [Test]
-    public void Parser_LoadsFile()
+    public void Parser_Optionally_HandlesTabDelimiters()
     {
-        var parser = NewParser("ok-well-formed");
+        var tabbed = new string[] { "1\t2\t 3 \t 4,4.5 as one\t5" };
+        var parser = new Parser(tabbed, Delimiters.Tab);
+
+        Assert.That(parser.RowCount, Is.EqualTo(1));
+        Assert.That(parser.Rows[0].CellCount, Is.EqualTo(5));
+        Assert.That(parser.Rows[0].AsCSV(), Is.EqualTo("\"1\",\"2\",\"3\",\"4,4.5 as one\",\"5\""));
+    }
+
+    [Test]
+    public void Parser_LoadsFile_LF_NoneWindows()
+    {
+        using var parserMaker = new ParserMaker();
+        var parser = parserMaker.UsingTemporaryFile("\n");
+
+        Assert.That(parser.RowCount, Is.EqualTo(4));
+    }
+
+    [Test]
+    public void Parser_LoadsFile_CRLF_Windows()
+    {
+        using var parserMaker = new ParserMaker();
+        var parser = parserMaker.UsingTemporaryFile("\r\n");
 
         Assert.That(parser.RowCount, Is.EqualTo(4));
     }
@@ -189,5 +210,53 @@ public class ParserSuccessTests
         var filename = Path.Combine("Fixtures", fixtureName) + ".csv";
         return new Parser(filename);
     }
+}
 
+/// <summary>
+/// Class that provides a Parser backed by a temporary file
+/// created using the provided line endings.
+/// Using this factory ensures the created file is cleared
+/// down again automatically upon dispose.
+/// </summary>
+internal class ParserMaker : IDisposable
+{
+    private string Filename = "";
+
+    /// <summary>
+    /// Returns a Parser backed by a temporary file with the
+    /// provided line endings. The temporary file is cleared
+    /// down again automatically upon dispose.
+    /// </summary>
+    public Parser UsingTemporaryFile(string lineEndings)
+    {
+        // Get the contents and destination.
+        var sourceFilename = Path.Combine("Fixtures", "ok-well-formed") + ".csv";
+        var sourceText = File.ReadAllLines(sourceFilename);
+        Filename = Path.GetTempFileName();
+
+        // Write using the specified line endings.
+        using var w = File.OpenWrite(Filename);
+        using var writer = new StreamWriter(w);
+        foreach (var line in sourceText)
+            writer.Write(line + lineEndings);
+        writer.Close();  // Not strictly needed but advisable here.
+        w.Close();  // Not strictly needed but advisable here.
+        return new Parser(Filename);
+    }
+
+    public void Dispose()
+    {
+        try
+        {
+            // Attempt to clear up when done.
+            File.Delete(Filename);
+        }
+        catch (Exception ex)
+        {
+            // Don't let this derail tests as temprary files
+            // are small and eventually cleaned up by other
+            // mechanisms anyway.
+            Console.WriteLine("Warning: " + ex.Message);
+        }
+    }
 }

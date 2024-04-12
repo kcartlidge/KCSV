@@ -50,4 +50,34 @@ public class RowTests
         Assert.That(parser.RowCount, Is.EqualTo(1));
         Assert.That(parser.Rows[0].AsCSV(), Is.EqualTo("1,\" 2\",3"));
     }
+
+    [Test]
+    public void Row_ToCSV_WithTabDelimiters_ReturnsAllCellsQuoted()
+    {
+        var tabbed = new string[] { " 1 \t \" 2\"\t 3  " };
+        var parser = new Parser(tabbed, Delimiters.Tab);
+
+        Assert.That(parser.RowCount, Is.EqualTo(1));
+        Assert.That(parser.Rows[0].AsCSV(), Is.EqualTo("\"1\",\" 2\",\"3\""));
+    }
+
+    [Test]
+    public void Row_ToTabbed_WithCSV_ReturnsWithEmbeddedTabsEscaped()
+    {
+        var csv = new string[] { " 1 , \" \t2\", 3  " };
+        var parser = new Parser(csv);
+
+        Assert.That(parser.RowCount, Is.EqualTo(1));
+        Assert.That(parser.Rows[0].AsTabbed(), Is.EqualTo("1\t\" \\t2\"\t3"));
+    }
+
+    [Test]
+    public void Row_ToTabbed_WithTabDelimited_ReturnsWithOriginalQuoting()
+    {
+        var tabbed = new string[] { " 1 \t \" 2\" \t 3  " };
+        var parser = new Parser(tabbed, Delimiters.Tab);
+
+        Assert.That(parser.RowCount, Is.EqualTo(1));
+        Assert.That(parser.Rows[0].AsTabbed(), Is.EqualTo("1\t\" 2\"\t3"));
+    }
 }
