@@ -10,7 +10,7 @@ namespace KCSV.Models
 
         /// <summary>
         /// The text, with any quoting from the original
-        /// CSV contentremoved.
+        /// CSV content removed.
         /// </summary>
         public readonly string Text = "";
 

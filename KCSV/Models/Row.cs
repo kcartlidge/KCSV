@@ -13,13 +13,15 @@ namespace KCSV.Models
     {
         /// <summary>The original CSV row number.</summary>
         public readonly int RowNumber = 0;
-        private readonly Delimiters Delimiter;
 
         /// <summary>The parsed cells from the row.</summary>
         public readonly List<Cell> Cells = new List<Cell>();
 
-        /// <summary>The number of cells in the line.</summary>
+        /// <summary>The number of cells in the row.</summary>
         public int CellCount => Cells.Count;
+
+        /// <summary>Separator between cells.</summary>
+        private readonly Delimiters Delimiter;
 
         /// <summary>The separator for cells in a row.</summary>
         private readonly char Separator = ',';

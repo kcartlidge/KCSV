@@ -1,9 +1,10 @@
 # CHANGELOG
 
-- 2024-04-14
+- 2024-04-14 **v1.0.0**
   - Checks for jagged tables (uneven cell counts in rows)
   - Optionally pads so all rows have equal cell count
   - Move to NetStandard 2.0 for high compatibility
+  - Wrapped as a Nuget package
 
 - 2024-04-12
   - Initial commit
