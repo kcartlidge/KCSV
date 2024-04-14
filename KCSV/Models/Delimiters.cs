@@ -1,7 +1,8 @@
-namespace KCSV.Models;
-
-/// <summary>Supported cell delimiters in rows.</summary>
-public enum Delimiters
+namespace KCSV.Models
 {
-    Comma, Tab
+    /// <summary>Supported cell delimiters in rows.</summary>
+    public enum Delimiters
+    {
+        Comma, Tab
+    }
 }

@@ -1,5 +1,10 @@
 # CHANGELOG
 
+- 2024-04-14
+  - Checks for jagged tables (uneven cell counts in rows)
+  - Optionally pads so all rows have equal cell count
+  - Move to NetStandard 2.0 for high compatibility
+
 - 2024-04-12
   - Initial commit
   - Standard repo files
