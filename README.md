@@ -9,6 +9,7 @@ A simple-to-use reliable CSV-parsing library.
 - [Features](#features)
 - [Usage](#usage)
   - [Loading CSV/Tab content from a file](#loading-csvtab-content-from-a-file)
+  - [Streaming CSV/Tab content from a file](#streaming-csvtab-content-from-a-file)
   - [Passing in CSV/Tab content from strings](#passing-in-csvtab-content-from-strings)
   - [The Table model, methods, and hierarchy](#the-table-model-methods-and-hierarchy)
 - [For developers working on KCSV itself](#for-developers-working-on-kcsv-itself)
@@ -21,7 +22,7 @@ A simple-to-use reliable CSV-parsing library.
 ## Features
 
 - **Uses NetStandard 2.0 for high compatibility**
-- **Loads content from a file**
+- **Loads or streams content from a file**
   - Both **CSV** and **Tabs** supported
   - Works with both Linux/Mac/Unix and Windows line endings
 - **Accepts content as an array of rows as strings**
@@ -51,9 +52,28 @@ Specifying the delimiter is optional; Comma is the default.
 
 ### Loading CSV/Tab content from a file
 
+This loads all the rows in one hit.
+
 ``` cs
 var table = Parser.LoadTable("file.csv", Delimiters.Comma);
 var table = Parser.LoadTable("file.tab", Delimiters.Tab);
+```
+
+### Streaming CSV/Tab content from a file
+
+This uses a forward-only stream of rows fetched one at
+a time from a file on demand.  Lighter on resources.
+
+``` cs
+using (var stream = Parser.StreamTable("file.csv", Delimiters.Comma))
+{
+  var rowNumber = 0;
+  while(stream.EndOfStream == false)
+  {
+    var row = stream.NextRow();
+    Console.WriteLine($"Row {++rowNumber} has {row.CellCount} cell(s)")
+  }
+}
 ```
 
 ### Passing in CSV/Tab content from strings
@@ -70,7 +90,7 @@ var table = Parser.FromString(csv, Delimiters.Comma);
 
 ### The Table model, methods, and hierarchy
 
-- Use either `LoadTable(...)` or `FromString(...)` to populate the `Table`
+- Use `LoadTable(...)`, `StreamTable`, or `FromString(...)`
   - See the examples above for details
 - All data whether loaded or taken from strings ends in a `Table`
 - The `Table` has row stats and a collection of `Rows`

@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using KCSV.Models;
 
@@ -17,15 +18,25 @@ namespace KCSV
         public static Table LoadTable(string filename, Delimiters delimiter = Delimiters.Comma)
         {
             var table = new Table();
-            using (var rdr = new StreamReader(filename))
+            try
             {
-                while (rdr.EndOfStream == false)
+                using (var rdr = new StreamReader(filename))
                 {
-                    // Parse each line as it is read in.
-                    table.RowCount += 1;
-                    table.RowList.Add(new Row(table.RowCount, delimiter, rdr.ReadLine()));
+                    while (rdr.EndOfStream == false)
+                    {
+                        // Parse each line as it is read in.
+                        table.RowCount += 1;
+                        table.RowList.Add(new Row(table.RowCount, delimiter, rdr.ReadLine()));
+                    }
                 }
-                rdr.Close();
+            }
+            catch (CSVException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new CSVException(table.RowCount, -1, ex.Message);
             }
 
             table.UpdateStats();
@@ -38,15 +49,56 @@ namespace KCSV
         public static Table FromStrings(string[] rows, Delimiters delimiter = Delimiters.Comma)
         {
             var table = new Table();
-            foreach (var row in rows)
+            try
             {
-                // Parse each line as it is accessed.
-                table.RowCount += 1;
-                table.RowList.Add(new Row(table.RowCount, delimiter, row));
+                foreach (var row in rows)
+                {
+                    // Parse each line as it is accessed.
+                    table.RowCount += 1;
+                    table.RowList.Add(new Row(table.RowCount, delimiter, row));
+                }
+            }
+            catch (CSVException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new CSVException(table.RowCount, -1, ex.Message);
             }
 
             table.UpdateStats();
             return table;
+        }
+
+        /// <summary>
+        /// Returns a stream for consuming rows of parsed CSV from a file.
+        /// This reduces overhead as the whole file is NOT read in advance.
+        /// </summary>
+        /// <param name="filename">The file to read in.</param>
+        /// <param name="delimiter">Separator for cells in rows.</param>
+        /// <returns>
+        /// A stream of rows, where each is read only as it is requested.
+        /// The usual Table structure is not available because the extra
+        /// information it provides (eg RowCount) cannot be known as all
+        /// rows have not been consumed.
+        /// </returns>
+        public static RowStream StreamTable(string filename, Delimiters delimiter = Delimiters.Comma)
+        {
+            RowStream stream = null;
+            try
+            {
+                return new RowStream(filename, delimiter);
+            }
+            catch (CSVException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                var rowNum = stream == null ? 0 : stream.rowCount;
+                throw new CSVException(rowNum, -1, ex.Message);
+            }
         }
     }
 }

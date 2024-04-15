@@ -35,7 +35,16 @@ internal static class Helper
     /// </summary>
     public static Table LoadTable(string fixtureName)
     {
-        var filename = Path.Combine("Fixtures", fixtureName) + ".csv";
+        var filename = GetFilename(fixtureName);
         return Parser.LoadTable(filename);
+    }
+
+    /// <summary>
+    /// Gets the fixture filename, converting it to the
+    /// expected path and appending the file type.
+    /// </summary>
+    public static string GetFilename(string fixtureName)
+    {
+        return Path.Combine("Fixtures", fixtureName) + ".csv";
     }
 }

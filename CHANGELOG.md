@@ -1,5 +1,8 @@
 # CHANGELOG
 
+- 2024-04-15 **v1.1.0**
+  - Streaming rows on demand for lighter resource usage
+
 - 2024-04-14 **v1.0.0**
   - Checks for jagged tables (uneven cell counts in rows)
   - Optionally pads so all rows have equal cell count

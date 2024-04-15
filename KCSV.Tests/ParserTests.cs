@@ -1,3 +1,4 @@
+using System;
 using KCSV.Models;
 
 namespace KCSV.Tests;
@@ -115,7 +116,7 @@ public class ParserTests
     [Test]
     public void Parser_UnclosedQuotedLastCell_IsAllowed()
     {
-        var csv = new string[] { "\"A\", \" B "};
+        var csv = new string[] { "\"A\", \" B " };
         var cell = -1;
 
         var table = Parser.FromStrings(csv);
@@ -180,9 +181,44 @@ public class ParserTests
     }
 
     [Test]
+    public void Parser_StreamTable_StreamsExpectedRows()
+    {
+        // Use normal loading to get the expectations.
+        var fixture = "ok-well-formed";
+        var table = Helper.LoadTable(fixture);
+        var expectedRowCount = table.RowCount;
+
+        // Create the stream to be tested.
+        var filename = Helper.GetFilename(fixture);
+        using (var stream = Parser.StreamTable(filename, Delimiters.Comma))
+        {
+            // Read each row in turn from the stream and
+            // check it exactly matches the expectation.
+            for (var i = 0; i < expectedRowCount; i++)
+            {
+                // We should still have rows and we should
+                // be able to read the next one okay.
+                Assert.That(stream.EndOfStream, Is.False);
+                var row = stream.NextRow();
+
+                // Check the contents, including quotes.
+                Assert.That(row.CellCount, Is.EqualTo(table.Rows[i].CellCount));
+                for (var j = 0; j < row.CellCount; j++)
+                {
+                    Assert.That(row.Cells[j].Formatted,
+                        Is.EqualTo(table.Rows[i].Cells[j].Formatted));
+                }
+            }
+
+            // We should now have reached the end of the stream.
+            Assert.That(stream.EndOfStream, Is.True);
+        }
+    }
+
+    [Test]
     public void Parser_Fails_ForContentAfterClosingQuote()
     {
-        var csv = new string[] { "row-one", "\"a\",\"b\" !,\"c\""};
+        var csv = new string[] { "row-one", "\"a\",\"b\" !,\"c\"" };
 
         var ex = Assert.Throws<CSVException>(() => Parser.FromStrings(csv));
         Assert.That(ex.Row, Is.EqualTo(2));
